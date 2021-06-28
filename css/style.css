@@ -1,0 +1,17 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: 'Rubik', sans-serif;
+}
+
+:root {
+    --color-primary: rgba(206,164,219,1);
+    --color-secondary: rgba(219,121,86,1);
+    --border-color: #666;
+}
+
+.main {
+    text-align: center;
+    height: 100vh;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+}

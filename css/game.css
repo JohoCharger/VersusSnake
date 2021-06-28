@@ -1,0 +1,85 @@
+#game-canvas {
+    border: 4px var(--border-color) solid;
+    border-radius: 10px;
+}
+
+.canvas-container {
+    margin-top: 5%;
+    display: inline-block;
+}
+
+.score-counter {
+    font-size: 6vh;
+    text-align: center;
+    color: #666;
+}
+
+.score-counter-container {
+    padding-top: 5%;
+}
+
+.message-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    box-shadow: 5px 5px 5px #555;
+    opacity: 0.8;
+    padding: 20px;
+    border: var(--border-color) 2px solid;
+    border-radius: 10px;
+    display: none;
+    color: var(--border-color);
+    font-size: 2.5vh;
+}
+
+.restart-button {
+    padding: 2vh 4vh;
+    margin: 2vh;
+    color: var(--border-color);
+}
+
+#game-over-text, #highscore-text {
+    font-size: 5vh;
+    margin: 1vh;
+}
+
+#lower-highscore-text {
+    margin: 1vh;
+}
+
+.highscore-message-input, .highscore-name-input, .submit-button {
+    resize: none;
+    font-family: 'Rubik', sans-serif;
+    margin: 1vh;
+    padding: 1vh;
+    border: 2px solid var(--border-color);
+    border-radius: 5px;
+}
+
+.submit-button {
+    padding: 2vh 4vh;
+    color: var(--border-color);
+}
+
+.leaderboard-button {
+    position: absolute;
+    bottom: 0;
+    padding: 1vw 3vw;
+    margin-bottom: 5vw;
+    transform: translateX(-50%);
+    border: var(--border-color) 2px solid;
+    border-radius: 5px;
+    box-shadow: 5px 5px 5px #555;
+    background: #ccc;
+    left: 50%;
+    font-size: 2vh;
+    color: var(--border-color);
+}
+
+#bad-name-text,#bad-message-text {
+    color: red;
+    display: none;
+}

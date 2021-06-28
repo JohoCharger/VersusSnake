@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>SnakeGame</title>
+	<link rel="stylesheet" type="text/css" href="css/game.css">
+	<link rel="stylesheet" type="text/css" href="css/style.css">
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+	<script type="text/javascript" src="js/config.js"></script>
+	<script type="text/javascript" src="js/snake.js"></script>
+	<script type="text/javascript" src="js/game.js"></script>
+	<script type="text/javascript" defer src="js/sketch.js"></script>
+</head>
+<body>
+	<div class="main">
+		<div class="message-box">
+			<p>This is a message box.</p>
+		</div>
+		<div class="score-counter-container">
+			<p class="score-counter">0</p>
+		</div>
+		<div class="canvas-container">
+			<canvas id="game-canvas"></canvas>
+		</div>
+	</div>
+	<template id="instructions-template">
+		<p>Move using WASD or the arrow keys</p>
+		<p>Swipe controls are not supported yet.</p>
+	</template>
+	<template id="game-over-template">
+		<p id="game-over-text">Game over!</p>
+		<p id="game-over-score-display">Final score: 0</p>
+		<button class="restart-button">Restart</button>
+	</template>
+</body>
+</html>
