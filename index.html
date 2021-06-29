@@ -25,8 +25,16 @@
 		</div>
 	</div>
 	<template id="instructions-template">
-		<p>Move using WASD or the arrow keys</p>
-		<p>Swipe controls are not supported yet.</p>
+		<div class="instructions">
+			<p>Crash the other player to win.</p>
+			<p>Ready up by pressing any of the keys.</p>
+			<br/>
+			<p id="player1-ready">Player 1 (WASD) </p>
+			<p id="player2-ready">Player 2 (Arrow keys)</p>
+		</div>
+		<div class="timer">
+			<span id="game-start-timer">3</span>
+		</div>
 	</template>
 	<template id="game-over-template">
 		<p id="game-over-text">Game over!</p>

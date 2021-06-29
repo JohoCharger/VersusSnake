@@ -209,17 +209,15 @@ class Game {
     }
 
     handleInput(code) {
-        if (code === "ArrowUp" &&
-            code === "ArrowDown" &&
-            code === "ArrowLeft" &&
+        if (code === "ArrowUp" ||
+            code === "ArrowDown" ||
+            code === "ArrowLeft" ||
             code === "ArrowRight"
         ) {
             this.snakes[1].handleInput(code);
-        }
-
-        if (code !== "KeyW" &&
-            code !== "KeyS" &&
-            code !== "KeyA" &&
+        } else if (code !== "KeyW" ||
+            code !== "KeyS" ||
+            code !== "KeyA" ||
             code !== "KeyD"
         ) {
             this.snakes[0].handleInput(code);
@@ -227,11 +225,28 @@ class Game {
     }
 
     update(deltaTime) {
-        for (let i = 0; i < this.snakes.length; i++) {
-            this.snakes[i].update();
-            if (this.snakes[i].collidesBorderOrSelf()) {
+        let s1 = this.snakes[0];
+        let s2 = this.snakes[1];
+
+        if (s1.headCollides(s2.pos.x + s2.vel.x, s2.pos.y + s2.vel.y)) {
+            console.log("tie");
+            this.running = false;
+        }
+        for (let i = 0; i < s2.tail.length; i++) {
+            if (s1.headCollides(s2.tail[i].x, s2.tail[i].y)) {
+                console.log("snake 1 collides with 2");
                 this.running = false;
             }
+        }
+        for (let i = 0; i < s1.tail.length; i++) {
+            if (s2.headCollides(s1.tail[i].x, s1.tail[i].y)) {
+                console.log("snake 2 collides with 1");
+                this.running = false;
+            }
+        }
+
+        for (let i = 0; i < this.snakes.length; i++) {
+            this.snakes[i].update();
             if (this.snakes[i].headCollides(this.apple.x, this.apple.y)) {
                 this.snakes[i].grow();
                 this.apple.spawn();
