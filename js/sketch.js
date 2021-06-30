@@ -32,32 +32,9 @@ function run(time=performance.now()) {
 }
 
 function gameOver() {
-    console.log("game over");
-}
-
-function submitInfo() {
-    const infoForm = document.getElementById("info-form");
-    const name = infoForm.elements["name"].value;
-    const message = infoForm.elements["message"].value;
-    const badName = document.getElementById("bad-name-text");
-    const badMessage = document.getElementById("bad-message-text");
-
-    badName.style.display = "none";
-    badMessage.style.display = "none";
-
-    let errors = false;
-    if (name.length < 3) {
-        badName.style.display = "block";
-        errors = true;
-    }
-    if (message.length < 5) {
-        badMessage.style.display = "block";
-        errors = true;
-    }
-
-    if (!errors) {
-        infoForm.submit();
-    }
+    setMessageBoxContents("#game-over-template");
+    document.querySelector("#game-over-text").textContent = game.gameEndText;
+    showMessageBox();
 }
 
 function firstKeystrokeListener(event) {

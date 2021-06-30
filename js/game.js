@@ -11,6 +11,7 @@ class Game {
         this.snakes = [];
         this.apple = {};
         this.running = false;
+        this.gameEndText = "Game over";
     }
 
     toVector(vectorOrX, y = undefined) {
@@ -225,32 +226,50 @@ class Game {
     }
 
     update(deltaTime) {
-        let s1 = this.snakes[0];
-        let s2 = this.snakes[1];
-
-        if (s1.headCollides(s2.pos.x + s2.vel.x, s2.pos.y + s2.vel.y)) {
-            console.log("tie");
-            this.running = false;
-        }
-        for (let i = 0; i < s2.tail.length; i++) {
-            if (s1.headCollides(s2.tail[i].x, s2.tail[i].y)) {
-                console.log("snake 1 collides with 2");
-                this.running = false;
-            }
-        }
-        for (let i = 0; i < s1.tail.length; i++) {
-            if (s2.headCollides(s1.tail[i].x, s1.tail[i].y)) {
-                console.log("snake 2 collides with 1");
-                this.running = false;
-            }
-        }
-
         for (let i = 0; i < this.snakes.length; i++) {
             this.snakes[i].update();
             if (this.snakes[i].headCollides(this.apple.x, this.apple.y)) {
                 this.snakes[i].grow();
                 this.apple.spawn();
             }
+        }
+
+        let s1 = this.snakes[0];
+        let s2 = this.snakes[1];
+
+        let p1died = false;
+        let p2died = false;
+
+        if (s1.headCollides(s2.pos.x + s2.vel.x, s2.pos.y + s2.vel.y)) {
+            p1died = true;
+            p2died = true;
+        }
+        for (let i = 0; i < s2.tail.length; i++) {
+            if (s1.headCollides(s2.tail[i].x, s2.tail[i].y)) {
+                p1died = true;
+            }
+        }
+        for (let i = 0; i < s1.tail.length; i++) {
+            if (s2.headCollides(s1.tail[i].x, s1.tail[i].y)) {
+                p2died = true;
+            }
+        }
+        if (s1.collidesBorderOrSelf()) {
+            p1died = true;
+        }
+        if (s2.collidesBorderOrSelf()) {
+            p2died = true;
+        }
+
+        if (p1died && p2died) {
+            this.gameEndText = "Tie!";
+            this.running = false;
+        } else if (p1died) {
+            this.gameEndText = "Player 1 won!";
+            this.running = false;
+        } else if (p2died) {
+            this.gameEndText = "Player 2 won!";
+            this.running = false;
         }
     }
 

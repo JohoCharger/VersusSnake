@@ -38,8 +38,12 @@
 	</template>
 	<template id="game-over-template">
 		<p id="game-over-text">Game over!</p>
-		<p id="game-over-score-display">Final score: 0</p>
-		<button class="restart-button">Restart</button>
+		<button class="restart-button" type="submit">Restart</button>
+		<script type="text/javascript">
+			document.querySelector(".restart-button").onclick = () => {
+				window.location.reload();
+			}
+		</script>
 	</template>
 </body>
 </html>

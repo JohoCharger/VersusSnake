@@ -4,7 +4,7 @@ class Snake {
         this.vel = {x: 0, y: -1};
         this.velQueue = [];
         this.pos = {x: x, y: y};
-        this.trueLength = 5; //TODO: More descriptive name??
+        this.trueLength = 5;
         this.tail = [];
 
         this.headTextures = headTextures;
@@ -111,10 +111,6 @@ class Snake {
 
     headCollides(x, y) {
         return this.pos.x === x && this.pos.y === y;
-    }
-
-    headCollidesNext(x, y) {
-        return this.pos.x + this.vel.x === x && this.pos.y + this.vel.y === y;
     }
 
     collides(x, y) {
