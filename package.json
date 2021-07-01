@@ -1,0 +1,27 @@
+{
+  "name": "versussnake",
+  "version": "1.0.0",
+  "description": "A PVP snake",
+  "main": "server.js",
+  "scripts": {
+    "dev": "nodemon server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JohoCharger/VersusSnake.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JohoCharger/VersusSnake/issues"
+  },
+  "homepage": "https://github.com/JohoCharger/VersusSnake#readme",
+  "dependencies": {
+    "ejs": "^3.1.6",
+    "express": "^4.17.1",
+    "path": "^0.12.7"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.9"
+  }
+}
