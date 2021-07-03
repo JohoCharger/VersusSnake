@@ -1,4 +1,4 @@
-const Config = {
+module.exports = {
     tileSize: 32,
     tileCount: 20,
     snakeGap: 5, //TODO: More descriptive name??

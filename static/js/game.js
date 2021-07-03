@@ -205,7 +205,7 @@ class Game {
         this.apple.spawn();
         this.draw();
 
-        Config.setFPS(7);
+        Config.setFPS(5);
         this.running = false;
     }
 

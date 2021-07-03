@@ -1,14 +1,13 @@
-class Snake {
-    constructor(game, x, y, headTextures, tailTextures) {
+const Config = require("./config");
+
+module.exports = class Snake {
+    constructor(game, x, y) {
         this.game = game;
         this.vel = {x: 0, y: -1};
         this.velQueue = [];
         this.pos = {x: x, y: y};
         this.trueLength = 5;
         this.tail = [];
-
-        this.headTextures = headTextures;
-        this.tailTextures = tailTextures;
 
         this.velToTexID = {
             "-10-10": 5,
@@ -32,8 +31,11 @@ class Snake {
     }
 
     update() {
-        let lastVel = this.game.toVector(this.vel);
-        if (this.velQueue.length) this.vel = this.game.toVector(this.velQueue.shift());
+        let lastVel = { x: this.vel.x, y: this.vel.y };
+        if (this.velQueue.length) {
+            let nextVel = this.velQueue.shift();
+            this.vel = { x: nextVel.x, y: nextVel.y };
+        }
 
         let a = String(this.vel.x) + String(this.vel.y) + String(lastVel.x) + String(lastVel.y);
         let textureID = this.velToTexID[a];
@@ -79,7 +81,7 @@ class Snake {
         if (x === lastInput.x || y === lastInput.y) return;
         this.velQueue.push(this.game.toVector(x, y));
     }
-
+    /*
     draw() {
         let headTexture = 4;
         if (this.vel.y === -1) {
@@ -107,7 +109,7 @@ class Snake {
                 tailPiece.y * Config.tileSize
             );
         });
-    }
+    }*/
 
     headCollides(x, y) {
         return this.pos.x === x && this.pos.y === y;
@@ -136,5 +138,13 @@ class Snake {
 
     grow() {
         this.trueLength++;
+    }
+
+    toString() {
+        return {
+            tail: this.tail,
+            pos: this.pos,
+            vel: this.vel
+        }
     }
 }
