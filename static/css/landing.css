@@ -1,0 +1,15 @@
+.message-box {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    text-align: center;
+    background: linear-gradient(180deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+    box-shadow: 5px 5px 5px #555;
+    opacity: 0.8;
+    padding: 20px;
+    border: var(--border-color) 2px solid;
+    border-radius: 10px;
+    color: var(--border-color);
+    font-size: 4vh;
+}

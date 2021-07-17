@@ -2,7 +2,11 @@ const Config = require("./config.js");
 const Snake = require("./snake.js")
 
 module.exports = class Game {
-    constructor() {
+    constructor(io, code) {
+        this.code = code;
+        this.io = io;
+        this.player1 = null;
+        this.player2 = null;
         this.snake1 = new Snake(this, Math.floor(Config.tileCount / 3), Config.tileCount - 2);
         this.snake2 = new Snake(this, Math.floor(Config.tileCount / 3 * 2), Config.tileCount - 2);
         this.apple = {
@@ -50,5 +54,17 @@ module.exports = class Game {
             snake2: this.snake2.toString(),
             apple: this.apple.toString()
         }
+    }
+
+    join(socket) {
+        if (!this.player1) {
+            this.player1 = socket;
+        } else if (!this.player2) {
+            this.player2 = socket;
+        } else {
+            return false;
+        }
+        this.io.to(this.code).emit("debug", "a player joined the game");
+        return true;
     }
 }

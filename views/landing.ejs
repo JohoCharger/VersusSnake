@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SnakeGame</title>
+    <link rel="stylesheet" type="text/css" href="css/landing.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Rubik&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="main">
+        <div class="message-box">
+            <form method="post" action="/">
+                <div class="form-inline">
+                    <div class="form-group">
+                        <input name="code" type="text" class="form-control" id="inputCode" placeholder="code">
+                    </div>
+                    <button type="submit" class="btn btn-primary">join</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        document.forms[0].onsubmit = function setCookie() {
+
+            const date = new Date();
+            date.setTime(date.getTime() + (30*24*60*60*1000));
+            const code = document.querySelector("#inputCode").value
+            document.cookie = `code=${ code }; expires=${ date.toUTCString() }; path=/`;
+
+        }
+    </script>
+</body>
+</html>

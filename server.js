@@ -1,4 +1,6 @@
 const express = require("express");
+const cookieSession = require('cookie-session')
+const bodyParser = require('body-parser');
 const path = require("path");
 const http = require("http");
 const Config = require("./game/config.js");
@@ -10,13 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
-const game = new Game();
-game.apple.spawn();
-
-setInterval(() => {
-    game.update();
-    io.emit("game_state", JSON.stringify(game.toString()));
-}, 500);
+const games = new Map();
 
 io.on("connection", socket => {
     console.log("A client connected");
@@ -33,8 +29,19 @@ io.on("connection", socket => {
         }));
     });
 
+    socket.on("join_game", code => {
+        code = "test"
+        socket.join(code);
+        if (games.has(code)) {
+            games.get(code).join(socket);
+        } else {
+            games.set(code, new Game(io, code));
+            games.get(code).join(socket);
+        }
+    });
+
     socket.on("get_game_state", () => {
-        socket.emit("game_state", JSON.stringify(game.toString()));
+        //socket.emit("game_state", JSON.stringify(game.toString()));
     });
 
     socket.on("game_input", message => {
@@ -43,11 +50,29 @@ io.on("connection", socket => {
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "./views"))
+app.set("trust proxy", 1)
+
+app.use(cookieSession({
+    name: "session",
+    keys: ["fdöskaflkdsavmsdakaädasdlas", "fjdlakfndsvkhsdatjsdagnfdm", "fhdsjflsdanvnsdaj"]
+}));
+
+app.use(bodyParser.urlencoded({
+    extended: false
+}));
 
 app.use(express.static(path.join(__dirname, "./static")));
 
 app.get("/", (request, response) => {
-    response.render("game")
+    response.render("landing");
+})
+app.post("/", (request, response) => {
+    request.session.code = request.body.code;
+    response.redirect("/play");
+});
+
+app.get("/play", (request, response) => {
+    response.render("game");
 });
 
 server.listen(PORT, () => { console.log(`Server listening on ${PORT}`) });

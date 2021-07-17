@@ -50,9 +50,15 @@ socket.on("game_state", gameStateRaw => {
     textures.drawApple(gameState.apple);
     textures.drawSnake1(gameState.snake1);
     textures.drawSnake2(gameState.snake2);
-})
+});
+
+socket.on("debug", (message) => {
+    console.log(message);
+});
 
 function start() {
+    const code = document.cookie.split("=")[1];
+    socket.emit("join_game", code);
     window.addEventListener("keydown", (e) => {
         socket.emit("game_input", e.code);
     });
