@@ -12,6 +12,13 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+function updateGames() {
+    games.forEach(game => {
+        game.update();
+    });
+}
+
+const gameUpdateInterval = setInterval(updateGames, Config.frameTime);
 const games = new Map();
 
 io.on("connection", socket => {

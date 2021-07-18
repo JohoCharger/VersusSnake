@@ -5,6 +5,7 @@ module.exports = class Game {
     constructor(io, code) {
         this.code = code;
         this.io = io;
+        this.running = false;
         this.player1 = null;
         this.player2 = null;
         this.snake1 = new Snake(this, Math.floor(Config.tileCount / 3), Config.tileCount - 2);
@@ -35,6 +36,10 @@ module.exports = class Game {
     }
 
     update() {
+        if (!this.running) {
+            return false;
+        }
+
         this.snake1.update();
         if (this.snake1.headCollides(this.apple.x, this.apple.y)) {
             this.snake1.grow();
@@ -46,6 +51,7 @@ module.exports = class Game {
             this.snake2.grow();
             this.apple.spawn();
         }
+        this.io.to(this.code).emit("game_state", JSON.stringify(this.toString()));
     }
 
     toString() {
@@ -64,7 +70,10 @@ module.exports = class Game {
         } else {
             return false;
         }
-        this.io.to(this.code).emit("debug", "a player joined the game");
+
+        if (this.player1 && this.player2) {
+            this.running = true;
+        }
         return true;
     }
 }

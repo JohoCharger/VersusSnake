@@ -63,7 +63,6 @@ function start() {
         socket.emit("game_input", e.code);
     });
     socket.emit("get_game_config");
-    socket.emit("get_game_state");
 }
 
 window.onload = start;
