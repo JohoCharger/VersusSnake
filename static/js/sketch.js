@@ -29,6 +29,10 @@ function showMessageBox() {
     messageBox.style.display = "block";
 }
 
+function displayMessage() {
+
+}
+
 function setMessageBoxContents(templateID) {
     let templateContents = document.querySelector(templateID);
     messageBox.innerHTML = "";
@@ -42,6 +46,7 @@ socket.on("game_config", message => {
 
     textures = createTextures(config);
     textures.setContext(context);
+    socket.emit("get_game_state");
 });
 
 socket.on("game_state", gameStateRaw => {
@@ -50,6 +55,20 @@ socket.on("game_state", gameStateRaw => {
     textures.drawApple(gameState.apple);
     textures.drawSnake1(gameState.snake1);
     textures.drawSnake2(gameState.snake2);
+});
+
+socket.on("display_message", message => {
+    if (message) {
+        showMessageBox();
+        if (message === "instructions") {
+            setMessageBoxContents("#instructions-template");
+            return;
+        }
+        setMessageBoxContents("#message-display-template");
+        document.querySelector("#message-display").innerHTML = message;
+    } else {
+        hideMessageBox();
+    }
 });
 
 socket.on("debug", (message) => {

@@ -69,17 +69,17 @@ module.exports = class Snake {
 
     queueInput(x, y) {
         if (this.vel.x === 0 && this.vel.y === 0) {
-            this.velQueue.push(this.game.toVector(x, y));
+            this.velQueue.push({ x: x, y: y });
             return;
         }
         if (this.velQueue.length === 0) {
             if (x === this.vel.x || y === this.vel.y)
                 return;
-            else this.velQueue.push(this.game.toVector(x, y));
+            else this.velQueue.push({ x: x, y: y });
         }
         let lastInput = this.velQueue[this.velQueue.length - 1];
         if (x === lastInput.x || y === lastInput.y) return;
-        this.velQueue.push(this.game.toVector(x, y));
+        this.velQueue.push({ x: x, y: y });
     }
     /*
     draw() {

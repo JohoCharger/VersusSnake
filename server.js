@@ -13,10 +13,16 @@ const server = http.createServer(app);
 const io = new Server(server);
 
 function updateGames() {
-    games.forEach(game => {
+    games.forEach((game, code) => {
+        if (game.shouldQuit()) {
+            games.delete(code);
+            return;
+        }
         game.update();
     });
 }
+
+Config.setFPS(7);
 
 const gameUpdateInterval = setInterval(updateGames, Config.frameTime);
 const games = new Map();
@@ -45,13 +51,6 @@ io.on("connection", socket => {
             games.set(code, new Game(io, code));
             games.get(code).join(socket);
         }
-    });
-
-    socket.on("get_game_state", () => {
-        //socket.emit("game_state", JSON.stringify(game.toString()));
-    });
-
-    socket.on("game_input", message => {
     });
 });
 

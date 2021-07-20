@@ -8,6 +8,8 @@ module.exports = class Game {
         this.running = false;
         this.player1 = null;
         this.player2 = null;
+        this.player1Ready = false;
+        this.player2Ready = false;
         this.snake1 = new Snake(this, Math.floor(Config.tileCount / 3), Config.tileCount - 2);
         this.snake2 = new Snake(this, Math.floor(Config.tileCount / 3 * 2), Config.tileCount - 2);
         this.apple = {
@@ -62,18 +64,84 @@ module.exports = class Game {
         }
     }
 
+    shouldQuit() {
+        if (this.running) {
+            return !(this.player1 && this.player2);
+        }
+        return false;
+    }
+
     join(socket) {
         if (!this.player1) {
             this.player1 = socket;
+
+            this.player1.on("get_game_state", () => {
+                this.player1.emit("game_state", JSON.stringify(this.toString()));
+            });
+
+            this.player1.on("game_input", code => {
+                if (this.running) {
+                    this.snake1.handleInput(code);
+                } else {
+                    this.player1Ready = true;
+                    if (!this.player2Ready) {
+                        this.player1.emit("display_message", "Waiting for player 2");
+                    }
+                    this.tryStart();
+                }
+            });
+
+            this.player1.on("disconnect", () => {
+                this.player1 = null;
+                this.io.to(this.code).emit("display_message","Player 1 disconnected");
+            });
+            this.player1.emit("display_message", "instructions");
+
         } else if (!this.player2) {
             this.player2 = socket;
+            this.player2.on("get_game_state", () => {
+                this.player2.emit("game_state", JSON.stringify(this.toString()));
+            });
+
+            this.player2.on("game_input", code => {
+                if (this.running) {
+                    this.snake2.handleInput(code);
+                } else {
+                    this.player2Ready = true;
+                    if (!this.player1Ready) {
+                        this.player2.emit("display_message", "Waiting for player 1");
+                    }
+                    this.tryStart();
+                }
+            });
+
+            this.player2.on("disconnect", () => {
+                this.player2 = null;
+                this.io.to(this.code).emit("display_message", "Player 2 disconnected");
+            });
+            this.player2.emit("display_message", "instructions");
         } else {
             return false;
         }
-
-        if (this.player1 && this.player2) {
-            this.running = true;
-        }
         return true;
+    }
+
+    tryStart() {
+        if (this.player1Ready && this.player2Ready) {
+            this.io.to(this.code).emit("display_message", "3");
+            setTimeout(() => {
+                this.io.to(this.code).emit("display_message", "2");
+            }, 1000);
+            setTimeout(() => {
+                this.io.to(this.code).emit("display_message", "1");
+            }, 2000);
+            setTimeout(() => {
+                this.io.to(this.code).emit("display_message", "GO!");
+            }, 3000);
+            setTimeout(() => {
+                this.running = true;
+                this.io.to(this.code).emit("display_message", "");
+            }, 4000);
+        }
     }
 }

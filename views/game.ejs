@@ -21,16 +21,15 @@
 			<canvas id="game-canvas"></canvas>
 		</div>
 	</div>
+	<template id="message-display-template">
+		<p id="message-display"></p>
+	</template>
+
 	<template id="instructions-template">
 		<div class="instructions">
+			<p>Move using WASD or the arrow keys.</p>
 			<p>Crash the other player to win.</p>
 			<p>Ready up by pressing any of the keys.</p>
-			<br/>
-			<p id="player1-ready">Player 1 (WASD) </p>
-			<p id="player2-ready">Player 2 (Arrow keys)</p>
-		</div>
-		<div class="timer">
-			<span id="game-start-timer">3</span>
 		</div>
 	</template>
 	<template id="game-over-template">

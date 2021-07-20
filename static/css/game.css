@@ -79,20 +79,6 @@
     color: var(--border-color);
 }
 
-#bad-name-text,#bad-message-text {
-    color: red;
-    display: none;
-}
-
-#player1-ready {
-    color: red;
-}
-
-#player2-ready {
-    color: red;
-}
-
-.timer {
-    display: none;
-    font-size: 10vh;
+#message-display {
+    font-size: 3vh;
 }
