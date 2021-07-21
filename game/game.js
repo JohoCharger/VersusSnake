@@ -169,7 +169,11 @@ module.exports = class Game {
         return true;
     }
 
-    tryStart() {
+    isFull() {
+        return (this.player1 && this.player2);
+    }
+
+    tryStart() { //TODO: Annoying bug
         if (this.player1Ready && this.player2Ready) {
             this.io.to(this.code).emit("display_message", "3");
             setTimeout(() => {

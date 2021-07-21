@@ -43,7 +43,9 @@ io.on("connection", socket => {
     });
 
     socket.on("join_game", code => {
-        code = "test"
+        if (!code) {
+            code = "test";
+        } // DEBUGGING PURPOSES TODO: Remove when everything else is done
         socket.join(code);
         if (games.has(code)) {
             games.get(code).join(socket);
@@ -70,10 +72,24 @@ app.use(bodyParser.urlencoded({
 app.use(express.static(path.join(__dirname, "./static")));
 
 app.get("/", (request, response) => {
-    response.render("landing");
+    response.render("landing", {errorMessage: ""});
 })
-app.post("/", (request, response) => {
-    request.session.code = request.body.code;
+app.post("/create", (request, response) => {
+    const code = request.body.code;
+    if (games.has(code)) {
+        return response.render("landing", {errorMessage: `Code ${code} is already in use`});
+    }
+    response.redirect("/play");
+});
+
+app.post("/join", (request, response) => {
+    const code = request.body.code;
+    if (!games.has(code)) {
+        return response.render("landing", {errorMessage: `Game with code ${code} does not exist`});
+    }
+    if (games.get(code).isFull()) {
+        return response.render("landing", {errorMessage: `Game with code ${code} is already in progress`});
+    }
     response.redirect("/play");
 });
 
