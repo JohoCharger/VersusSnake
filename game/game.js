@@ -36,6 +36,7 @@ module.exports = class Game {
                 }
             }
         }
+        this.apple.spawn();
     }
 
     update() {
@@ -98,6 +99,8 @@ module.exports = class Game {
             this.shouldQuit = true;
         }
 
+        this.player1.emit("update_length", this.snake1.trueLength);
+        this.player2.emit("update_length", this.snake2.trueLength);
         this.io.to(this.code).emit("game_state", JSON.stringify(this.toString()));
     }
 

@@ -71,6 +71,10 @@ socket.on("display_message", message => {
     }
 });
 
+socket.on("update_length", length => {
+    scoreCounter.textContent = length;
+});
+
 socket.on("debug", (message) => {
     console.log(message);
 });
