@@ -14,7 +14,7 @@ const io = new Server(server);
 
 function updateGames() {
     games.forEach((game, code) => {
-        if (game.shouldQuit()) {
+        if (game.shouldQuit) {
             games.delete(code);
             return;
         }
@@ -28,7 +28,7 @@ const gameUpdateInterval = setInterval(updateGames, Config.frameTime);
 const games = new Map();
 
 io.on("connection", socket => {
-    console.log("A client connected");
+    //console.log("A client connected");
 
     socket.on("get_game_config", () => {
         socket.emit("game_config", JSON.stringify({

@@ -6,6 +6,7 @@ module.exports = class Game {
         this.code = code;
         this.io = io;
         this.running = false;
+        this.shouldQuit = false;
         this.player1 = null;
         this.player2 = null;
         this.player1Ready = false;
@@ -39,7 +40,7 @@ module.exports = class Game {
 
     update() {
         if (!this.running) {
-            return false;
+            return;
         }
 
         this.snake1.update();
@@ -53,6 +54,50 @@ module.exports = class Game {
             this.snake2.grow();
             this.apple.spawn();
         }
+
+        let s1 = this.snake1;
+        let s2 = this.snake2;
+
+        let p1died = false;
+        let p2died = false;
+
+        if (s1.headCollides(s2.pos.x + s2.vel.x, s2.pos.y + s2.vel.y)) {
+            p1died = true;
+            p2died = true;
+        }
+        for (let i = 0; i < s2.tail.length; i++) {
+            if (s1.headCollides(s2.tail[i].x, s2.tail[i].y)) {
+                p1died = true;
+            }
+        }
+        for (let i = 0; i < s1.tail.length; i++) {
+            if (s2.headCollides(s1.tail[i].x, s1.tail[i].y)) {
+                p2died = true;
+            }
+        }
+        if (s1.collidesBorderOrSelf()) {
+            p1died = true;
+        }
+        if (s2.collidesBorderOrSelf()) {
+            p2died = true;
+        }
+
+        if (p1died && p2died) {
+            this.io.to(this.code).emit("display_message", "Tie!");
+            this.running = false;
+            this.shouldQuit = true;
+        } else if (p1died) {
+            this.player2.emit("display_message", "You won!");
+            this.player1.emit("display_message", "You lost!");
+            this.running = false;
+            this.shouldQuit = true;
+        } else if (p2died) {
+            this.player1.emit("display_message", "You won!");
+            this.player2.emit("display_message", "You lost!");
+            this.running = false;
+            this.shouldQuit = true;
+        }
+
         this.io.to(this.code).emit("game_state", JSON.stringify(this.toString()));
     }
 
@@ -62,13 +107,6 @@ module.exports = class Game {
             snake2: this.snake2.toString(),
             apple: this.apple.toString()
         }
-    }
-
-    shouldQuit() {
-        if (this.running) {
-            return !(this.player1 && this.player2);
-        }
-        return false;
     }
 
     join(socket) {
@@ -93,6 +131,7 @@ module.exports = class Game {
 
             this.player1.on("disconnect", () => {
                 this.player1 = null;
+                this.shouldQuit = true;
                 this.io.to(this.code).emit("display_message","Player 1 disconnected");
             });
             this.player1.emit("display_message", "instructions");
@@ -117,6 +156,7 @@ module.exports = class Game {
 
             this.player2.on("disconnect", () => {
                 this.player2 = null;
+                this.shouldQuit = true;
                 this.io.to(this.code).emit("display_message", "Player 2 disconnected");
             });
             this.player2.emit("display_message", "instructions");
