@@ -1,2 +1,3 @@
 # Versus snake
-A PVP snake game
+A local PVP snake game  
+Progress on online features is on the other branches

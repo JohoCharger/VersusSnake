@@ -265,10 +265,10 @@ class Game {
             this.gameEndText = "Tie!";
             this.running = false;
         } else if (p1died) {
-            this.gameEndText = "Player 1 won!";
+            this.gameEndText = "Player 2 won!";
             this.running = false;
         } else if (p2died) {
-            this.gameEndText = "Player 2 won!";
+            this.gameEndText = "Player 1 won!";
             this.running = false;
         }
     }
