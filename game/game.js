@@ -180,7 +180,7 @@ module.exports = class Game {
         return (this.player1 && this.player2);
     }
 
-    tryStart() { //TODO: Annoying bug
+    tryStart() {
         if (this.player1Ready && this.player2Ready && !this.started) {
             this.started = true;
             this.io.to(this.code).emit("display_message", "3");
