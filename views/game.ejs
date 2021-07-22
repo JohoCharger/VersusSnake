@@ -37,6 +37,7 @@
 		<button class="restart-button" type="submit">Restart</button>
 		<script type="text/javascript">
 			document.querySelector(".restart-button").onclick = () => {
+				socket.disconnect();
 				window.location.reload();
 			}
 		</script>

@@ -61,6 +61,12 @@ socket.on("display_message", message => {
     }
 });
 
+socket.on("game_over", message => {
+    setMessageBoxContents("#game-over-template");
+    document.querySelector("#game-over-text").textContent = message;
+    showMessageBox();
+});
+
 socket.on("update_length", length => {
     scoreCounter.textContent = length;
 });

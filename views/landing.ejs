@@ -28,15 +28,6 @@
             </form>
         </div>
     </div>
-    <script>
-        document.forms[0].onsubmit = function setCookie() {
-
-            const date = new Date();
-            date.setTime(date.getTime() + (30*24*60*60*1000));
-            const code = document.querySelector("#inputCode").value
-            document.cookie = `code=${ code }; expires=${ date.toUTCString() }; path=/`;
-
-        }
-    </script>
+    <script type="text/javascript" src="js/landing.js"></script>
 </body>
 </html>

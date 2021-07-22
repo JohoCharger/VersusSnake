@@ -7,6 +7,7 @@ module.exports = class Game {
         this.io = io;
         this.running = false;
         this.shouldQuit = false;
+        this.started = false;
         this.player1 = null;
         this.player2 = null;
         this.player1Ready = false;
@@ -84,17 +85,17 @@ module.exports = class Game {
         }
 
         if (p1died && p2died) {
-            this.io.to(this.code).emit("display_message", "Tie!");
+            this.io.to(this.code).emit("game_over", "Tie!");
             this.running = false;
             this.shouldQuit = true;
         } else if (p1died) {
-            this.player2.emit("display_message", "You won!");
-            this.player1.emit("display_message", "You lost!");
+            this.player2.emit("game_over", "You won!");
+            this.player1.emit("game_over", "You lost!");
             this.running = false;
             this.shouldQuit = true;
         } else if (p2died) {
-            this.player1.emit("display_message", "You won!");
-            this.player2.emit("display_message", "You lost!");
+            this.player1.emit("game_over", "You won!");
+            this.player2.emit("game_over", "You lost!");
             this.running = false;
             this.shouldQuit = true;
         }
@@ -133,6 +134,9 @@ module.exports = class Game {
             });
 
             this.player1.on("disconnect", () => {
+                if (this.shouldQuit) {
+                    return;
+                }
                 this.player1 = null;
                 this.shouldQuit = true;
                 this.io.to(this.code).emit("display_message","Player 1 disconnected");
@@ -158,6 +162,9 @@ module.exports = class Game {
             });
 
             this.player2.on("disconnect", () => {
+                if (this.shouldQuit) {
+                    return;
+                }
                 this.player2 = null;
                 this.shouldQuit = true;
                 this.io.to(this.code).emit("display_message", "Player 2 disconnected");
@@ -174,7 +181,8 @@ module.exports = class Game {
     }
 
     tryStart() { //TODO: Annoying bug
-        if (this.player1Ready && this.player2Ready) {
+        if (this.player1Ready && this.player2Ready && !this.started) {
+            this.started = true;
             this.io.to(this.code).emit("display_message", "3");
             setTimeout(() => {
                 this.io.to(this.code).emit("display_message", "2");
