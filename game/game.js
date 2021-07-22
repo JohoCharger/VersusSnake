@@ -127,7 +127,7 @@ module.exports = class Game {
                 } else {
                     this.player1Ready = true;
                     if (!this.player2Ready) {
-                        this.player1.emit("display_message", "Waiting for player 2");
+                        this.player1.emit("display_message", "Waiting for opponent");
                     }
                     this.tryStart();
                 }
@@ -139,7 +139,7 @@ module.exports = class Game {
                 }
                 this.player1 = null;
                 this.shouldQuit = true;
-                this.io.to(this.code).emit("display_message","Player 1 disconnected");
+                this.io.to(this.code).emit("display_message","Opponent disconnected");
             });
             this.player1.emit("display_message", "instructions");
 
@@ -155,7 +155,7 @@ module.exports = class Game {
                 } else {
                     this.player2Ready = true;
                     if (!this.player1Ready) {
-                        this.player2.emit("display_message", "Waiting for player 1");
+                        this.player2.emit("display_message", "Waiting for opponent");
                     }
                     this.tryStart();
                 }
@@ -167,7 +167,7 @@ module.exports = class Game {
                 }
                 this.player2 = null;
                 this.shouldQuit = true;
-                this.io.to(this.code).emit("display_message", "Player 2 disconnected");
+                this.io.to(this.code).emit("display_message", "Opponent disconnected");
             });
             this.player2.emit("display_message", "instructions");
         } else {
