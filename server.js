@@ -12,6 +12,8 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+const MAX_GAMES = 10;
+
 function updateGames() {
     games.forEach((game, code) => {
         if (game.shouldQuit) {
@@ -43,15 +45,11 @@ io.on("connection", socket => {
     });
 
     socket.on("join_game", code => {
-        if (!code) {
-            code = "test";
-        } // DEBUGGING PURPOSES TODO: Remove when everything else is done
-        socket.join(code);
         if (games.has(code)) {
+            socket.join(code);
             games.get(code).join(socket);
         } else {
-            games.set(code, new Game(io, code));
-            games.get(code).join(socket);
+            socket.emit("redirect");
         }
     });
 });
@@ -79,6 +77,11 @@ app.post("/create", (request, response) => {
     if (games.has(code)) {
         return response.render("landing", {errorMessage: `Code ${code} is already in use`});
     }
+    if (games.size >= MAX_GAMES) {
+        return response.render("landing", {errorMessage: "Servers are full. Try again in a few minutes."});
+    }
+
+    games.set(code, new Game(io, code));
     response.redirect("/play");
 });
 

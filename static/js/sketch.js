@@ -4,16 +4,10 @@ const messageBox = document.querySelector(".message-box");
 const canvas = document.getElementById("game-canvas");
 const context = canvas.getContext("2d");
 
-let player1readyText = null;
-let player2readyText = null;
-
 let config = null;
 let textures = null;
 
 const socket = io();
-
-let lastTime = 0;
-let accumulator = 0;
 
 function gameOver() {
     setMessageBoxContents("#game-over-template");
@@ -27,10 +21,6 @@ function hideMessageBox() {
 
 function showMessageBox() {
     messageBox.style.display = "block";
-}
-
-function displayMessage() {
-
 }
 
 function setMessageBoxContents(templateID) {
@@ -75,13 +65,21 @@ socket.on("update_length", length => {
     scoreCounter.textContent = length;
 });
 
+socket.on("redirect", () => {
+    window.location = "/";
+});
+
 socket.on("debug", (message) => {
     console.log(message);
 });
 
 function start() {
     const code = document.cookie.split("=")[1];
+    if (!code) {
+        window.location = "/";
+    }
     socket.emit("join_game", code);
+    scoreCounter.textContent = `Code: ${code}`;
     window.addEventListener("keydown", (e) => {
         socket.emit("game_input", e.code);
     });
