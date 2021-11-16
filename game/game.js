@@ -63,7 +63,7 @@ module.exports = class Game {
         let p1died = false;
         let p2died = false;
 
-        if (s1.headCollides(s2.pos.x + s2.vel.x, s2.pos.y + s2.vel.y)) {
+        if (s1.headCollides(s2.pos.x, s2.pos.y)) {
             p1died = true;
             p2died = true;
         }
@@ -84,18 +84,16 @@ module.exports = class Game {
             p2died = true;
         }
 
-        if (p1died && p2died) {
-            this.io.to(this.code).emit("game_over", "Tie!");
-            this.running = false;
-            this.shouldQuit = true;
-        } else if (p1died) {
-            this.player2.emit("game_over", "You won!");
-            this.player1.emit("game_over", "You lost!");
-            this.running = false;
-            this.shouldQuit = true;
-        } else if (p2died) {
-            this.player1.emit("game_over", "You won!");
-            this.player2.emit("game_over", "You lost!");
+        if (p1died || p2died) {
+            if (p1died && p2died) {
+                this.io.to(this.code).emit("game_over", "Tie!");
+            } else if (p1died) {
+                this.player2.emit("game_over", "You won!");
+                this.player1.emit("game_over", "You lost!");
+            } else if (p2died) {
+                this.player1.emit("game_over", "You won!");
+                this.player2.emit("game_over", "You lost!");
+            }
             this.running = false;
             this.shouldQuit = true;
         }
